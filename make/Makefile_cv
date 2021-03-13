@@ -1,0 +1,22 @@
+NAME = new_runtime
+
+INPUT = ../src/$(NAME).cc
+OUTPUT = ../src/$(NAME)
+
+GCC = g++
+LIBS = -ltvm_runtime -lopencv_core -lopencv_imgproc -lopencv_highgui -lopencv_ml -lopencv_imgcodecs
+TVM_ROOT=/home/shenao/tvm/tvm
+DMLC_CORE=${TVM_ROOT}/3rdparty/dmlc-core
+PKG_CFLAGS = -O2 -fPIC\
+	-I${TVM_ROOT}/include\
+	-I${DMLC_CORE}/include\
+	-I${TVM_ROOT}/3rdparty/dlpack/include\
+	-I/usr/local/include/opencv4\
+
+PKG_LDFLAGS = -L${TVM_ROOT}/build -L/usr/local/lib -ldl -pthread
+
+$(OUTPUT):$(INPUT)
+	$(GCC) $(PKG_CFLAGS) -o $@ $^ $(LIBS) $(PKG_LDFLAGS)
+
+clean:
+	rm $(OUTPUT)

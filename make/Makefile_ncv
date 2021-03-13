@@ -1,0 +1,24 @@
+NAME = runtime
+
+INPUT = ../src/$(NAME).cc
+OUTPUT = ../$(NAME)
+
+GCC = g++
+LIBS = -ltvm_runtime 
+
+TVM_ROOT=/home/shenao/tvm/tvm
+LIB_ROOT=/home/shenao/tvm/tvm_temp
+DMLC_CORE=${TVM_ROOT}/3rdparty/dmlc-core
+
+PKG_CFLAGS = -O2 -fPIC\
+	-I${TVM_ROOT}/include\
+	-I${DMLC_CORE}/include\
+	-I${TVM_ROOT}/3rdparty/dlpack/include
+
+PKG_LDFLAGS = -L${TVM_ROOT}/build
+
+$(OUTPUT):$(INPUT)
+	$(GCC) $(PKG_CFLAGS) -o $@ $^ $(LIBS) $(PKG_LDFLAGS)
+
+clean:
+	rm run

@@ -1,0 +1,15 @@
+NAME = model_pb
+
+OUTPUT = ../model/lib$(NAME)_riscv.so
+INPUT = ../model/$(NAME).ll
+
+CLANG = clang++
+SYSROOT = /home/shenao/riscv64-linux/riscv64/sysroot
+TARGET = riscv64-unknown-linux-gnu
+LIB = /home/shenao/riscv64-linux/riscv64/lib/gcc/riscv64-unknown-linux-gnu/10.0.1 
+
+$(OUTPUT):$(INPUT)
+	$(CLANG) --sysroot=$(SYSROOT) -shared -fPIC $(INPUT) -o $(OUTPUT) --target=$(TARGET) -L$(LIB)
+
+clean:
+	rm $(OUTPUT)
