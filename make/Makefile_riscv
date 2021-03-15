@@ -1,7 +1,7 @@
 NAME = new_runtime
 
 INPUT = ../src/$(NAME).cc
-OUTPUT = ../$(NAME)
+OUTPUT = ../bin/$(NAME)
 
 GCC = riscv64-unknown-linux-gnu-g++
 LIBS = -ltvm_runtime 

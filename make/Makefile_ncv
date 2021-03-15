@@ -1,7 +1,7 @@
 NAME = runtime
 
 INPUT = ../src/$(NAME).cc
-OUTPUT = ../$(NAME)
+OUTPUT = ../bin/$(NAME)
 
 GCC = g++
 LIBS = -ltvm_runtime 

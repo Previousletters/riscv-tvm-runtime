@@ -1,7 +1,7 @@
 NAME = new_runtime
 
 INPUT = ../src/$(NAME).cc
-OUTPUT = ../src/$(NAME)
+OUTPUT = ../bin/$(NAME)
 
 GCC = g++
 LIBS = -ltvm_runtime -lopencv_core -lopencv_imgproc -lopencv_highgui -lopencv_ml -lopencv_imgcodecs
