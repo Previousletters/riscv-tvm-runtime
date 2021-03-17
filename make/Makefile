@@ -1,5 +1,5 @@
 CC_FILE = new_runtime
-NAME = model_pb
+NAME = sine 
 
 GCC = riscv64-unknown-linux-gnu-g++
 CLANG = clang++

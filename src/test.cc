@@ -8,10 +8,20 @@
 #include <algorithm>
 #include <iostream>
 
-#include <opencv2/opencv.hpp>
+#include "model.hh" 
 
 int main(int argc, char** argv)
 {
-    std::cout << "Success!\n";
+    tvm_model model("model_pb", 0);
+    std::string * paths = model.getPath();
+    model.modLoad();
+    tvm::runtime::Module mod_lib;
+    std::string json_data;
+    std::string params_data;
+    model.getModel(mod_lib, json_data, params_data);
+    std::cout << model.getPath()[0] << std::endl;
+    std::cout << model.getPath()[1] << std::endl;
+    std::cout << model.getPath()[2] << std::endl;
+    std::cout << json_data << std::endl;
     return 0;
 }

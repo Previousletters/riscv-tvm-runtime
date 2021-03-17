@@ -1,0 +1,17 @@
+NAME = sine
+CLANG = clang++
+TARGET = riscv64-unknown-linux-gnu
+LIB = /home/shenao/riscv64-linux/riscv64/lib/gcc/riscv64-unknown-linux-gnu/10.0.1 
+
+INPUT_FILE = ../model/$(NAME).ll
+OUTPUT_FILE = ../model/lib$(NAME)_riscv.so
+
+.PHONY: all, clean
+
+all:$(OUTPUT_FILE)
+
+$(OUTPUT_FILE):$(INPUT_FILE)
+	$(CLANG) --sysroot=$(SYSROOT) -shared -fPIC $^ -o $@ --target=$(TARGET) -L$(LIB)
+
+clean:
+	rm $(OUTPUT_FILE)

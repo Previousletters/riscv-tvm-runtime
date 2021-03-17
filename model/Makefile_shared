@@ -1,7 +1,7 @@
-NAME = mobilenet
+NAME = mobilenet_v1
 
-OUTPUT = ../model/lib$(NAME)_riscv.so
-INPUT = ../model/$(NAME).ll
+OUTPUT = lib$(NAME)_riscv.so
+INPUT = $(NAME).ll
 
 CLANG = clang++
 SYSROOT = /home/shenao/riscv64-linux/riscv64/sysroot

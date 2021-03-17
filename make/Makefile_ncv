@@ -1,24 +1,34 @@
-NAME = runtime
+NAME = test
 
-INPUT = ../src/$(NAME).cc
-OUTPUT = ../bin/$(NAME)
+PATH_INPUT = ../src
+PATH_OUTPUT = ../bin
+HEAD_FILE = ${PATH_INPUT}/model.cc
+
+INPUT = ${PATH_INPUT}/$(NAME).cc ${HEAD_FILE}
+OUTPUT = ${PATH_OUTPUT}/$(NAME)
 
 GCC = g++
 LIBS = -ltvm_runtime 
 
+PRO_ROOT=..
 TVM_ROOT=/home/shenao/tvm/tvm
 LIB_ROOT=/home/shenao/tvm/tvm_temp
 DMLC_CORE=${TVM_ROOT}/3rdparty/dmlc-core
 
 PKG_CFLAGS = -O2 -fPIC\
+	-I${PRO_ROOT}/include\
 	-I${TVM_ROOT}/include\
 	-I${DMLC_CORE}/include\
 	-I${TVM_ROOT}/3rdparty/dlpack/include
 
 PKG_LDFLAGS = -L${TVM_ROOT}/build
 
+.PHONY: all, clean
+
+all:$(OUTPUT)
+
 $(OUTPUT):$(INPUT)
 	$(GCC) $(PKG_CFLAGS) -o $@ $^ $(LIBS) $(PKG_LDFLAGS)
 
 clean:
-	rm run
+	rm $(OUTPUT) 

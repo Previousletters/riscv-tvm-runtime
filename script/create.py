@@ -3,11 +3,7 @@ import tvm
 from tvm import relay
 from model import *
 
-NAME            = "mobilenet_v1.tflite"
-LABEL_NAME      = "input"
-LABEL_SHAPE     = [1, 224, 224, 3]
-
-OUTPUT_NAME     = ""
+NAME            = compile_model 
 
 def compile_nn_model(model_path, shape_dict, model_name):
     mod, params = load_model(model_path, shape_dict)
@@ -28,6 +24,6 @@ def compile_nn_model(model_path, shape_dict, model_name):
     print("save finish")
 
 if __name__ == "__main__":
-    model_path = "../nn/%s"%NAME
-    shape_dict = {LABEL_NAME: LABEL_SHAPE}
-    compile_nn_model(model_path, shape_dict, OUTPUT_NAME)
+    model_path = "../nn/%s"%model_list[NAME][0]
+    shape_dict = {model_list[NAME][1]: model_list[NAME][2]}
+    compile_nn_model(model_path, shape_dict, NAME)

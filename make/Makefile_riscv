@@ -1,4 +1,4 @@
-NAME = new_runtime
+NAME = sine_runtime
 
 INPUT = ../src/$(NAME).cc
 OUTPUT = ../bin/$(NAME)
@@ -13,7 +13,7 @@ DMLC_CORE=${TVM_ROOT}/3rdparty/dmlc-core
 PKG_CFLAGS = -O2 -fPIC\
 	-I${LIB_ROOT}/include\
 	-I${DMLC_CORE}/include\
-	-I${LIB_ROOT}/3rdparty/dlpack/include
+	-I${TVM_ROOT}/3rdparty/dlpack/include
 
 PKG_LDFLAGS = -L${LIB_ROOT}/build_linux
 
