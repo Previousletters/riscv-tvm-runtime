@@ -37,3 +37,24 @@ void tvm_model::getModel(tvm::runtime::Module &mod, std::string &json, std::stri
     json = this->json_data;
     params = this->params_data;
 }
+
+float* tvm_model::get_image(std::string name)
+{
+	std::ifstream fin(name.c_str(), std::ios::binary);
+	fin.seekg(0, std::ios::end);
+	int iSize = fin.tellg();
+	char* szBuf = new (std::nothrow) char[iSize];
+    float* image = new float[iSize/4];
+
+	fin.seekg(0, std::ios::beg);
+	fin.read(szBuf, sizeof(char) * iSize);
+	fin.close();
+ 
+    for(int i = 0; i < iSize; i+=4)
+    {
+        float temp;
+        memcpy(&temp, szBuf+ i*sizeof(char), 4*sizeof(char));
+        image[(int)(i/4)] = temp;
+    }
+    return image;
+}

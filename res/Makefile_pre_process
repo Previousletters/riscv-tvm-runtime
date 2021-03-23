@@ -1,0 +1,17 @@
+INPUT_FILE = pre_process.cc
+OUTPUT_FILE = ../bin/pre_process
+INCLUDE_FILE = image.cc
+
+INPUT_PATH = ../src/
+INCLUDE_PATH = -I../include/ -I/usr/local/include/opencv4/
+LIBS = -lopencv_core -lopencv_imgproc -lopencv_highgui -lopencv_ml -lopencv_imgcodecs
+
+GCC = g++
+
+.PHONY: all
+
+all:${OUTPUT_FILE}
+
+
+${OUTPUT_FILE}:${INPUT_PATH}${INPUT_FILE} ${INPUT_PATH}${INCLUDE_FILE}
+	${GCC} ${INCLUDE_PATH} -o $@ $^ ${LIBS}

@@ -8,45 +8,24 @@
 #include <algorithm>
 #include <iostream>
 
-#include <opencv2/opencv.hpp>
-
-void get_CHW(float *data, std::string img_path)
-{
-    cv::Mat image = cv::imread(img_path);
-    cv::Mat frame;
-    cv::Mat input;
-
-    cv::cvtColor(image, frame, cv::COLOR_BGR2RGB);
-    cv::resize(frame, input,  cv::Size(224,224));
-
-    assert(data && !frame.empty());
-    unsigned int volChl = 224 * 224;
-
-    for(int c = 0; c < 3; ++c)
-    {
-        for (unsigned j = 0; j < volChl; ++j)
-            data[c*volChl + j] = static_cast<float>(float(frame.data[c*volChl + j]) / 255.0);
-    }
-}
-
+#include "model.hh"
 
 int main(int argc, char** argv)
 {
-    std::cout << "Action 1" << std::endl;
-    tvm::runtime::Module mod_dylib = tvm::runtime::Module::LoadFromFile("/home/shenao/Learning/tvm/2021-work/model/libmodel_pb.so");
-    std::cout << "Action 2" << std::endl;
+    tvm_model model("mobilenet", 1);
+    std::string* model_path = model.getPath();
+    std::cout << model_path[0] << "\n" << model_path[1] << "\n" << model_path[2] << "\n";
+    model.modLoad();
+    tvm::runtime::Module mod_dylib;
+    std::string json_data;
+    std::string params_data;
+    model.getModel(mod_dylib, json_data, params_data);
+    std::cout << "Success get model\n";
 
-    std::ifstream json_in("../model/model_pb.graph", std::ios::in);
-    std::string json_data((std::istreambuf_iterator<char>(json_in)), std::istreambuf_iterator<char>());
-    json_in.close();
-
-    std::ifstream params_in("../model/model_pb.params", std::ios::binary);
-    std::string params_data((std::istreambuf_iterator<char>(params_in)), std::istreambuf_iterator<char>());
-    params_in.close();
-    
     TVMByteArray params_arr;
     params_arr.data = params_data.c_str();
     params_arr.size = params_data.length();
+    std::cout << "Success input params\n";
 
     int dtype_code = kDLFloat;
     int dtype_bits = 32;
@@ -56,17 +35,16 @@ int main(int argc, char** argv)
 
     tvm::runtime::Module mod = (*tvm::runtime::Registry::Get("tvm.graph_runtime.create"))
             (json_data, mod_dylib, device_type, device_id);
+    std::cout << "Success create runtime\n";
 
     DLTensor *x;
     int in_ndim = 4;
     int64_t in_shape[4] = {1, 224, 224, 3};
-    float data[224*224*3];
     TVMArrayAlloc(in_shape, in_ndim, dtype_code, dtype_bits, dtype_lanes, device_type, device_id, &x);
 
-    get_CHW(data, "../../2020-work/img/lemon.png");
-    
+    float* data = model.get_image("../res/cat.bin");
     // x为之前的张量类型 data为之前开辟的浮点型空间
-    memcpy(x->data, &data, 224 * 224 * 3 * sizeof(float));
+    memcpy(x->data, &data[0], 224 * 224 * 3 * sizeof(float));
 
     tvm::runtime::PackedFunc set_input = mod.GetFunction("set_input");
     set_input("0", x);
@@ -77,7 +55,7 @@ int main(int argc, char** argv)
 
     DLTensor* y;
     int out_ndim = 2;
-    int64_t out_shape[2] = {1, 1};
+    int64_t out_shape[2] = {1, 1001};
     TVMArrayAlloc(out_shape, out_ndim, dtype_code, dtype_bits, dtype_lanes, device_type, device_id, &y);
 
     // get the function from the module(run it)

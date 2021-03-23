@@ -23,5 +23,7 @@ int main(int argc, char** argv)
     std::cout << model.getPath()[1] << std::endl;
     std::cout << model.getPath()[2] << std::endl;
     std::cout << json_data << std::endl;
+    float* data = model.get_image("../res/cat.bin");
+    std::cout << data[0] << "\t" << data[1] << std::endl;
     return 0;
 }

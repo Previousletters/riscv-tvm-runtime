@@ -1,4 +1,4 @@
-NAME = test
+NAME = mobilenet
 
 PATH_INPUT = ../src
 PATH_OUTPUT = ../bin

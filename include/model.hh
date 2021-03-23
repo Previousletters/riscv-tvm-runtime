@@ -20,6 +20,7 @@ class tvm_model
         std::string *getPath();
         void modLoad();
         void getModel(tvm::runtime::Module &mod, std::string &json, std::string &params);
+        float* get_image(std::string name);
 };
 
 #endif
